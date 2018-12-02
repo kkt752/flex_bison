@@ -1,0 +1,34 @@
+mainprog myprogram;
+var a, b, c : array[5] of int;
+var d : float;
+function foo ( n : int ) : int;
+var e : int;
+begin a[0] =50 - 40 + 1 * 3;
+a[1] = 10;
+a[2] = 20;
+a[3] = 30;
+a[4] = 40;
+n = 555;
+e = 0;
+b[2] = 3;
+c[4] = 4;
+print (a[0] + e);
+while(e < 5)
+print(a[e]);
+return c[4] + n end
+function bar ( m : float ) : float;
+var f : float;
+begin
+f = 3.14;
+return f + m end
+begin
+b[0] = 3;
+d = 1.23;
+if 
+b[0] == 3
+then
+foo(b[0])
+else
+print(b[0]);
+bar(d)
+end
