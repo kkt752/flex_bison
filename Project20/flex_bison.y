@@ -16,24 +16,31 @@ void yyerror(char *);
 int yylex(void);
 int yylineno;
 char* yytext;
+int errors;
 
 void install (char *sym_name)
 {
-	symrec *s;
-	s = putsym(sym_name);
+        symrec *s;
+        s = getsym(sym_name);
+        if (s == 0)
+            s = putsym(sym_name);
+        else {
+            errors++;
+            printf("%s is defined\n", sym_name);
+        }
 }
 
 
 %}
 
 %union{
-	char * varName;
-	int I;
-	float F;
+	char * stringValue;
+	int iValue;
+	float fValue;
 }
-%token <varName> ID;
-%token <I> Integer;
-%token <F> Float;
+%token <stringValue> ID;
+%token <iValue> Integer;
+%token <fValue> Float;
 
 
 %token MAINPROG;
@@ -103,6 +110,7 @@ identifier_list:
 	{
 		install($3);
 	}
+
 	;
 
 type:
@@ -167,8 +175,8 @@ print_statement:
 	;
 
 variable:
-	ID
-	| ID BIGPL_T expression BIGPR_T
+	ID { context_check($1); }
+	| ID BIGPL_T expression BIGPR_T { context_check($1); }
 	;
 
 procedure_statement:
@@ -237,11 +245,13 @@ multop:
 	
 %%
 
-void yyerror(char *s)
+yyerror (char *s) /* Called by yyparse on error */
 {
-   fprintf(stderr, "%s at line %d in the source code at %s\n", s, yylineno, yytext);
+    errors++;
+    printf ("%s\n", s);
 }
 
 int main (void) {
+    errors = 0;
     yyparse();
 }

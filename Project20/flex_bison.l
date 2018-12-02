@@ -1,7 +1,7 @@
 %{
 #include<stdio.h>
 #include<string.h>
-#include "First.tab.h"
+#include "flex_bison.tab.h"
 void yyerror(const char *);
 %}
 %option nounput yylineno	
@@ -28,8 +28,8 @@ void yyerror(const char *);
 "while"				{ return WHILE; }
 "return"				{ return RETURN; }
 "print"      			{ return PRINT; }
-"int"				{ yylval.I = 1; return INT; }
-"float"				{ yylval.I = 2; return FLOAT; }
+"int"				{ return INT; }
+"float"				{ return FLOAT; }
 
 
 [a-zA-Z][a-zA-Z0-9]*                      yylval.varName = yytext;  return ID;
