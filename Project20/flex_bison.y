@@ -55,7 +55,8 @@ void install(char *sym_name)
 %token WHILE;
 %token RETURN;
 %token PRINT;
-
+%token INT;
+%token FLOAT;
 
 %token OP01;
 %token OP02;
@@ -82,23 +83,22 @@ void install(char *sym_name)
 %%
 
 program:
-MAINPROG ID SEMICOL_T declarations subprogram_declarations compound_statement
-{
-	print_sym_table();
-}
-;
-
+	MAINPROG ID SEMICOL_T declarations subprogram_declarations compound_statement
+	{
+		print_sym_table();
+	}
+	;
+	
 
 declarations:
-declarations VAR identifier_list COL_T type SEMICOL_T
-{
-
-}
-|
-;
+	declarations VAR identifier_list COL_T type SEMICOL_T
+	{
+		
+	}
+	| 
+	;
 
 identifier_list:
-
 	ID
 	{
 		install($1);
@@ -108,20 +108,21 @@ identifier_list:
 		install($3);
 	}
 	;
-	
+
 type:
 	standard_type
-	| ARRAY BIGPL_T Integer BIGPR_T OF standard_type
+	| ARRAY BIGPL_T Integer BIGPR_T OF INT { set_type("INTARR"); }
+	| ARRAY BIGPL_T Integer BIGPR_T OF FLOAT { set_type("FLOATARR"); }
 	;
 
 standard_type:
-	INT{ set_type("INTEGER"); }
-	| FLOAT{ set_type("FLOAT"); }
+	INT { set_type("INTEGER"); }
+	| FLOAT { set_type("FLOAT"); }
 	;
 
 subprogram_declarations:
 	subprogram_declaration subprogram_declarations
-	|
+	| 
 	;
 
 subprogram_declaration:
@@ -135,7 +136,7 @@ subprogram_head:
 
 arguments:
 	SMALLPL_T parameter_list SMALLPR_T
-	|
+	| 
 	;
 
 parameter_list:
@@ -174,7 +175,6 @@ variable:
 	| ID BIGPL_T expression BIGPR_T
 	;
 
-
 procedure_statement:
 	ID SMALLPL_T actual_parameter_expression SMALLPR_T
 	;
@@ -198,9 +198,7 @@ simple_expression:
 	term
 	| term addop simple_expression
 
-
-
-term :
+term:
 	factor
 	| factor multop term
 	;
@@ -246,6 +244,6 @@ yyerror (char *s) /* Called by yyparse on error */
 	fprintf(stderr, "%s at line %d in the source code at %s\n", s, yylineno, yytext);
 }
 
-int main(void) {
-	yyparse();
+int main (void) {
+    yyparse();
 }

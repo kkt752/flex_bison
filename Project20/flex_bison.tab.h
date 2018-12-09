@@ -89,11 +89,11 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 36 "flex_bison.y"
+#line 29 "flex_bison.y"
 
-	char * stringValue;
-	int iValue;
-	float fValue;
+	char * varName;
+	int I;
+	float F;
 
 
 
