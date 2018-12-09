@@ -12,6 +12,7 @@
 #include "SymbolTable.h"
 #define VAR_MAX_NUM 1000000
 
+<<<<<<< HEAD
 void yyerror(char *);
 int yylex(void);
 int yylineno;
@@ -29,10 +30,23 @@ void install (char *sym_name)
             printf("%s is defined\n", sym_name);
         }
 }
+=======
+	void yyerror(char *);
+	int yylex(void);
+	int yylineno;
+	char* yytext;
+
+	void install(char *sym_name)
+	{
+		symrec *s;
+		s = putsym(sym_name);
+	}
+>>>>>>> parent of a22cec9... 일반 변수에 더하여 배열까지 이름, 타입 구현.
 
 
-%}
+	%}
 
+<<<<<<< HEAD
 %union{
 	char * stringValue;
 	int iValue;
@@ -41,6 +55,21 @@ void install (char *sym_name)
 %token <stringValue> ID;
 %token <iValue> Integer;
 %token <fValue> Float;
+=======
+%union {
+	char * varName;
+	int I;
+	float F;
+}
+%token <varName> ID;
+%token <I>INT;
+%token <F>FLOAT;
+
+
+%token <I> Integer;
+
+%token <F> Float;
+>>>>>>> parent of a22cec9... 일반 변수에 더하여 배열까지 이름, 타입 구현.
 
 
 %token MAINPROG;
@@ -58,8 +87,7 @@ void install (char *sym_name)
 %token WHILE;
 %token RETURN;
 %token PRINT;
-%token INT;
-%token FLOAT;
+
 
 %token OP01;
 %token OP02;
@@ -86,22 +114,23 @@ void install (char *sym_name)
 %%
 
 program:
-	MAINPROG ID SEMICOL_T declarations subprogram_declarations compound_statement
-	{
-		print_sym_table();
-	}
-	;
-	
+MAINPROG ID SEMICOL_T declarations subprogram_declarations compound_statement
+{
+	print_sym_table();
+}
+;
+
 
 declarations:
-	declarations VAR identifier_list COL_T type SEMICOL_T
-	{
-		
-	}
-	| 
-	;
+declarations VAR identifier_list COL_T type SEMICOL_T
+{
+
+}
+|
+;
 
 identifier_list:
+<<<<<<< HEAD
 	ID
 	{
 		install($1);
@@ -112,141 +141,158 @@ identifier_list:
 	}
 
 	;
+=======
+ID
+{
+	install($1);
+}
+| identifier_list COMMA_T ID
+{
+	install($3);
+}
+;
+>>>>>>> parent of a22cec9... 일반 변수에 더하여 배열까지 이름, 타입 구현.
 
 type:
-	standard_type
-	| ARRAY BIGPL_T Integer BIGPR_T OF INT { set_type("INTARR"); }
-	| ARRAY BIGPL_T Integer BIGPR_T OF FLOAT { set_type("FLOATARR"); }
-	;
+standard_type
+| ARRAY BIGPL_T Integer BIGPR_T OF standard_type
+;
 
 standard_type:
-	INT { set_type("INTEGER"); }
-	| FLOAT { set_type("FLOAT"); }
-	;
+INT{ set_type("INTEGER"); }
+| FLOAT{ set_type("FLOAT"); }
+;
 
 subprogram_declarations:
-	subprogram_declaration subprogram_declarations
-	| 
-	;
+subprogram_declaration subprogram_declarations
+|
+;
 
 subprogram_declaration:
-	subprogram_head declarations compound_statement
-	;
+subprogram_head declarations compound_statement
+;
 
 subprogram_head:
-	FUNCTION ID arguments COL_T standard_type SEMICOL_T
-	| PROCEDURE ID arguments SEMICOL_T
-	;
+FUNCTION ID arguments COL_T standard_type SEMICOL_T
+| PROCEDURE ID arguments SEMICOL_T
+;
 
 arguments:
-	SMALLPL_T parameter_list SMALLPR_T
-	| 
-	;
+SMALLPL_T parameter_list SMALLPR_T
+|
+;
 
 parameter_list:
-	identifier_list COL_T type
-	|
-	identifier_list COL_T type SEMICOL_T parameter_list
-	;
+identifier_list COL_T type
+|
+identifier_list COL_T type SEMICOL_T parameter_list
+;
 
 compound_statement:
-	BEGIN_R statement_list END_R
-	;
+BEGIN_R statement_list END_R
+;
 
 statement_list:
-	statement
-	| statement SEMICOL_T statement_list
-	;
+statement
+| statement SEMICOL_T statement_list
+;
 
 statement:
-	variable EQU_T expression
-	| print_statement
-	| procedure_statement
-	| compound_statement
-	| IF expression THEN statement ELSE statement
-	| WHILE SMALLPL_T expression SMALLPR_T statement
-	| RETURN expression
-	| NOP
-	;
+variable EQU_T expression
+| print_statement
+| procedure_statement
+| compound_statement
+| IF expression THEN statement ELSE statement
+| WHILE SMALLPL_T expression SMALLPR_T statement
+| RETURN expression
+| NOP
+;
 
 print_statement:
-	PRINT
-	| PRINT SMALLPL_T expression SMALLPR_T
-	;
+PRINT
+| PRINT SMALLPL_T expression SMALLPR_T
+;
 
 variable:
+<<<<<<< HEAD
 	ID { context_check($1); }
 	| ID BIGPL_T expression BIGPR_T { context_check($1); }
 	;
+=======
+ID
+| ID BIGPL_T expression BIGPR_T
+;
+>>>>>>> parent of a22cec9... 일반 변수에 더하여 배열까지 이름, 타입 구현.
 
 procedure_statement:
-	ID SMALLPL_T actual_parameter_expression SMALLPR_T
-	;
+ID SMALLPL_T actual_parameter_expression SMALLPR_T
+;
 
 actual_parameter_expression:
-	| expression_list
-	;
+| expression_list
+;
 
 
 expression_list:
-	expression
-	| expression COMMA_T expression_list
-	;
+expression
+| expression COMMA_T expression_list
+;
 
 expression:
-	simple_expression
-	| simple_expression relop simple_expression
-	;
+simple_expression
+| simple_expression relop simple_expression
+;
 
 simple_expression:
-	term
-	| term addop simple_expression
+term
+| term addop simple_expression
 
- 
 
-term:
-	factor
-	| factor multop term
-	;
+
+term :
+factor
+| factor multop term
+;
 
 factor:
-	Integer
-	| Float
-	| variable
-	| procedure_statement
-	| OP11 factor
-	| sign factor
-	;
+Integer
+| Float
+| variable
+| procedure_statement
+| OP11 factor
+| sign factor
+;
 
 
 sign:
-	OP01
-	| OP02
-	;
+OP01
+| OP02
+;
 
 relop:
-	OP06
-	| OP07
-	| OP05
-	| OP08
-	| OP09
-	| OP10
-	;
+OP06
+| OP07
+| OP05
+| OP08
+| OP09
+| OP10
+;
 
 addop:
-	OP01
-	| OP02
-	;
+OP01
+| OP02
+;
 
 multop:
-	OP03
-	| OP04
-	;
-	
+OP03
+| OP04
+;
+
 %%
 
 yyerror (char *s) /* Called by yyparse on error */
 {
+<<<<<<< HEAD
     errors++;
     printf ("%s\n", s);
 }
@@ -254,4 +300,11 @@ yyerror (char *s) /* Called by yyparse on error */
 int main (void) {
     errors = 0;
     yyparse();
+=======
+	fprintf(stderr, "%s at line %d in the source code at %s\n", s, yylineno, yytext);
+}
+
+int main(void) {
+	yyparse();
+>>>>>>> parent of a22cec9... 일반 변수에 더하여 배열까지 이름, 타입 구현.
 }

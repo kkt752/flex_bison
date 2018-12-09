@@ -81,18 +81,25 @@ void yyerror(char *);
 int yylex(void);
 int yylineno;
 char* yytext;
+int errors;
 
 void install (char *sym_name)
 {
-	symrec *s;
-	s = putsym(sym_name);
+        symrec *s;
+        s = getsym(sym_name);
+        if (s == 0)
+            s = putsym(sym_name);
+        else {
+            errors++;
+            printf("%s is defined\n", sym_name);
+        }
 }
 
 
 
 
 /* Line 189 of yacc.c  */
-#line 96 "flex_bison.tab.c"
+#line 103 "flex_bison.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -169,16 +176,16 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 29 "flex_bison.y"
+#line 36 "flex_bison.y"
 
-	char * varName;
-	int I;
-	float F;
+	char * stringValue;
+	int iValue;
+	float fValue;
 
 
 
 /* Line 214 of yacc.c  */
-#line 182 "flex_bison.tab.c"
+#line 189 "flex_bison.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -190,7 +197,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 194 "flex_bison.tab.c"
+#line 201 "flex_bison.tab.c"
 
 #ifdef short
 # undef short
@@ -502,13 +509,13 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    82,    82,    90,    94,    98,   102,   109,   110,   111,
-     115,   116,   120,   121,   125,   129,   130,   134,   135,   139,
-     141,   145,   149,   150,   154,   155,   156,   157,   158,   159,
-     160,   161,   165,   166,   170,   171,   175,   178,   179,   184,
-     185,   189,   190,   194,   195,   200,   201,   205,   206,   207,
-     208,   209,   210,   215,   216,   220,   221,   222,   223,   224,
-     225,   229,   230,   234,   235
+       0,    89,    89,    97,   101,   105,   109,   117,   118,   119,
+     123,   124,   128,   129,   133,   137,   138,   142,   143,   147,
+     149,   153,   157,   158,   162,   163,   164,   165,   166,   167,
+     168,   169,   173,   174,   178,   179,   183,   186,   187,   192,
+     193,   197,   198,   202,   203,   208,   209,   213,   214,   215,
+     216,   217,   218,   223,   224,   228,   229,   230,   231,   232,
+     233,   237,   238,   242,   243
 };
 #endif
 
@@ -1492,7 +1499,7 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 83 "flex_bison.y"
+#line 90 "flex_bison.y"
     {
 		print_sym_table();
 	;}
@@ -1501,7 +1508,7 @@ yyreduce:
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 91 "flex_bison.y"
+#line 98 "flex_bison.y"
     {
 		
 	;}
@@ -1510,53 +1517,67 @@ yyreduce:
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 99 "flex_bison.y"
+#line 106 "flex_bison.y"
     {
-		install((yyvsp[(1) - (1)].varName));
+		install((yyvsp[(1) - (1)].stringValue));
 	;}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 103 "flex_bison.y"
+#line 110 "flex_bison.y"
     {
-		install((yyvsp[(3) - (3)].varName));
+		install((yyvsp[(3) - (3)].stringValue));
 	;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 110 "flex_bison.y"
+#line 118 "flex_bison.y"
     { set_type("INTARR"); ;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 111 "flex_bison.y"
+#line 119 "flex_bison.y"
     { set_type("FLOATARR"); ;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 115 "flex_bison.y"
+#line 123 "flex_bison.y"
     { set_type("INTEGER"); ;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 116 "flex_bison.y"
+#line 124 "flex_bison.y"
     { set_type("FLOAT"); ;}
+    break;
+
+  case 34:
+
+/* Line 1455 of yacc.c  */
+#line 178 "flex_bison.y"
+    { context_check((yyvsp[(1) - (1)].stringValue)); ;}
+    break;
+
+  case 35:
+
+/* Line 1455 of yacc.c  */
+#line 179 "flex_bison.y"
+    { context_check((yyvsp[(1) - (4)].stringValue)); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1560 "flex_bison.tab.c"
+#line 1581 "flex_bison.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1768,15 +1789,17 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 238 "flex_bison.y"
+#line 246 "flex_bison.y"
 
 
-void yyerror(char *s)
+yyerror (char *s) /* Called by yyparse on error */
 {
-   fprintf(stderr, "%s at line %d in the source code at %s\n", s, yylineno, yytext);
+    errors++;
+    printf ("%s\n", s);
 }
 
 int main (void) {
+    errors = 0;
     yyparse();
 }
 
