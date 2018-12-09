@@ -12,13 +12,6 @@
 #include "SymbolTable.h"
 #define VAR_MAX_NUM 1000000
 
-<<<<<<< HEAD
-void yyerror(char *);
-int yylex(void);
-int yylineno;
-char* yytext;
-int errors;
-
 void yyerror(char *);
 int yylex(void);
 int yylineno;
